@@ -11,12 +11,16 @@ import {
   ScrollView
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { User, Mail, Eye, EyeOff, ArrowLeft } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type RegisterScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Register'>;
 
 export default function RegisterScreen() {
-  const router = useRouter();
+  const navigation = useNavigation<RegisterScreenNavigationProp>();
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,7 +45,10 @@ export default function RegisterScreen() {
     setTimeout(() => {
       setLoading(false);
       Alert.alert('Success', 'Account created successfully', [
-        { text: 'OK', onPress: () => router.replace('/(tabs)') }
+        { text: 'OK', onPress: () => navigation.reset({
+          index: 0,
+          routes: [{ name: 'Main' }],
+        }) }
       ]);
     }, 1500);
   };
@@ -56,9 +63,9 @@ export default function RegisterScreen() {
           <ScrollView contentContainerStyle={styles.scrollContent}>
             <TouchableOpacity 
               style={styles.backButton}
-              onPress={() => router.back()}
+              onPress={() => navigation.goBack()}
             >
-              <ArrowLeft size={24} color="#C4767C" />
+              <Icon name="arrow-back" size={24} color="#C4767C" />
             </TouchableOpacity>
 
             <View style={styles.header}>
@@ -76,7 +83,7 @@ export default function RegisterScreen() {
                   value={fullName}
                   onChangeText={setFullName}
                 />
-                <User size={20} color="#C4767C" style={styles.inputIcon} />
+                <Icon name="person" size={20} color="#C4767C" style={styles.inputIcon} />
               </View>
 
               <View style={styles.inputContainer}>
@@ -88,7 +95,7 @@ export default function RegisterScreen() {
                   keyboardType="email-address"
                   autoCapitalize="none"
                 />
-                <Mail size={20} color="#C4767C" style={styles.inputIcon} />
+                <Icon name="mail" size={20} color="#C4767C" style={styles.inputIcon} />
               </View>
 
               <View style={styles.inputContainer}>
@@ -103,11 +110,11 @@ export default function RegisterScreen() {
                   onPress={() => setShowPassword(!showPassword)}
                   style={styles.inputIcon}
                 >
-                  {showPassword ? (
-                    <EyeOff size={20} color="#C4767C" />
-                  ) : (
-                    <Eye size={20} color="#C4767C" />
-                  )}
+                  <Icon 
+                    name={showPassword ? 'eye-off' : 'eye'} 
+                    size={20} 
+                    color="#C4767C" 
+                  />
                 </TouchableOpacity>
               </View>
 
@@ -123,11 +130,11 @@ export default function RegisterScreen() {
                   onPress={() => setShowConfirmPassword(!showConfirmPassword)}
                   style={styles.inputIcon}
                 >
-                  {showConfirmPassword ? (
-                    <EyeOff size={20} color="#C4767C" />
-                  ) : (
-                    <Eye size={20} color="#C4767C" />
-                  )}
+                  <Icon 
+                    name={showConfirmPassword ? 'eye-off' : 'eye'} 
+                    size={20} 
+                    color="#C4767C" 
+                  />
                 </TouchableOpacity>
               </View>
 
@@ -143,7 +150,7 @@ export default function RegisterScreen() {
 
               <View style={styles.loginContainer}>
                 <Text style={styles.loginText}>Already have an account? </Text>
-                <TouchableOpacity onPress={() => router.push('/login')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
                   <Text style={styles.loginLink}>Login</Text>
                 </TouchableOpacity>
               </View>

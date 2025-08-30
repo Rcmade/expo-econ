@@ -9,11 +9,15 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { MapPin, Package, Globe, Bell, DollarSign, CircleHelp as HelpCircle, Shield, FileText, LogOut, ChevronRight, MoveHorizontal as MoreHorizontal, CreditCard as Edit } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type ProfileScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 export default function ProfileScreen() {
-  const router = useRouter();
+  const navigation = useNavigation<ProfileScreenNavigationProp>();
 
   const handleLogout = () => {
     Alert.alert(
@@ -21,30 +25,33 @@ export default function ProfileScreen() {
       'Are you sure you want to logout?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Logout', onPress: () => router.replace('/onboarding') }
+        { text: 'Logout', onPress: () => navigation.reset({
+          index: 0,
+          routes: [{ name: 'Onboarding' }],
+        }) }
       ]
     );
   };
 
   const menuItems = [
-    { icon: MapPin, title: 'Address', subtitle: 'Manage your saved address', onPress: () => {} },
-    { icon: Package, title: 'Order History', subtitle: 'View your past orders', onPress: () => {} },
-    { icon: Globe, title: 'Language', subtitle: '', onPress: () => {} },
-    { icon: Bell, title: 'Notifications', subtitle: '', onPress: () => {} },
+    { icon: 'location-outline', title: 'Address', subtitle: 'Manage your saved address', onPress: () => {} },
+    { icon: 'receipt-outline', title: 'Order History', subtitle: 'View your past orders', onPress: () => {} },
+    { icon: 'globe-outline', title: 'Language', subtitle: '', onPress: () => {} },
+    { icon: 'notifications-outline', title: 'Notifications', subtitle: '', onPress: () => {} },
   ];
 
   const supportItems = [
-    { icon: DollarSign, title: 'Contact Us', onPress: () => {} },
-    { icon: HelpCircle, title: 'Get Help', onPress: () => {} },
-    { icon: Shield, title: 'Privacy Policy', onPress: () => {} },
-    { icon: FileText, title: 'Terms and Conditions', onPress: () => {} },
+    { icon: 'call-outline', title: 'Contact Us', onPress: () => {} },
+    { icon: 'help-circle-outline', title: 'Get Help', onPress: () => {} },
+    { icon: 'shield-outline', title: 'Privacy Policy', onPress: () => {} },
+    { icon: 'document-text-outline', title: 'Terms and Conditions', onPress: () => {} },
   ];
 
   const renderMenuItem = (item: any, showSubtitle = true) => (
     <TouchableOpacity key={item.title} style={styles.menuItem} onPress={item.onPress}>
       <View style={styles.menuItemLeft}>
         <View style={styles.iconContainer}>
-          <item.icon size={20} color="#C4767C" />
+          <Icon name={item.icon} size={20} color="#C4767C" />
         </View>
         <View style={styles.menuItemText}>
           <Text style={styles.menuItemTitle}>{item.title}</Text>
@@ -53,7 +60,7 @@ export default function ProfileScreen() {
           ) : null}
         </View>
       </View>
-      <ChevronRight size={20} color="#C0C0C0" />
+      <Icon name="chevron-forward" size={20} color="#C0C0C0" />
     </TouchableOpacity>
   );
 
@@ -63,7 +70,7 @@ export default function ProfileScreen() {
         <View style={styles.header}>
           <Text style={styles.title}>Profile</Text>
           <TouchableOpacity>
-            <MoreHorizontal size={24} color="#333" />
+            <Icon name="ellipsis-horizontal" size={24} color="#333" />
           </TouchableOpacity>
         </View>
 
@@ -79,7 +86,7 @@ export default function ProfileScreen() {
             </View>
           </View>
           <TouchableOpacity style={styles.editButton}>
-            <Edit size={20} color="#C4767C" />
+            <Icon name="create-outline" size={20} color="#C4767C" />
           </TouchableOpacity>
         </View>
 
@@ -94,7 +101,7 @@ export default function ProfileScreen() {
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <View style={styles.menuItemLeft}>
             <View style={[styles.iconContainer, styles.logoutIconContainer]}>
-              <LogOut size={20} color="#E74C3C" />
+              <Icon name="log-out-outline" size={20} color="#E74C3C" />
             </View>
             <Text style={styles.logoutText}>Log Out</Text>
           </View>

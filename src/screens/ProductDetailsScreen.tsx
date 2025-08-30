@@ -9,19 +9,25 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter, useLocalSearchParams } from 'expo-router';
-import { ArrowLeft, Share, Star, ShoppingBag } from 'lucide-react-native';
-import { useProductStore, Product } from '@/stores/useProductStore';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useProductStore, Product } from '../stores/useProductStore';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type ProductDetailsScreenNavigationProp = StackNavigationProp<RootStackParamList, 'ProductDetails'>;
+type ProductDetailsScreenRouteProp = RouteProp<RootStackParamList, 'ProductDetails'>;
 
 export default function ProductDetailsScreen() {
-  const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const navigation = useNavigation<ProductDetailsScreenNavigationProp>();
+  const route = useRoute<ProductDetailsScreenRouteProp>();
+  const { id } = route.params;
   const { products } = useProductStore();
   const [product, setProduct] = useState<Product | null>(null);
 
   useEffect(() => {
     if (id) {
-      const foundProduct = products.find(p => p.id === parseInt(id as string));
+      const foundProduct = products.find(p => p.id === parseInt(id));
       setProduct(foundProduct || null);
     }
   }, [id, products]);
@@ -37,19 +43,19 @@ export default function ProductDetailsScreen() {
 
     for (let i = 0; i < fullStars; i++) {
       stars.push(
-        <Star key={i} size={16} color="#FFD700" fill="#FFD700" />
+        <Icon key={i} name="star" size={16} color="#FFD700" />
       );
     }
 
     if (hasHalfStar) {
       stars.push(
-        <Star key="half" size={16} color="#FFD700" fill="#FFD700" />
+        <Icon key="half" name="star-half" size={16} color="#FFD700" />
       );
     }
 
     for (let i = stars.length; i < 5; i++) {
       stars.push(
-        <Star key={i} size={16} color="#E0E0E0" fill="none" />
+        <Icon key={i} name="star-outline" size={16} color="#E0E0E0" />
       );
     }
 
@@ -60,8 +66,8 @@ export default function ProductDetailsScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()}>
-            <ArrowLeft size={24} color="#333" />
+          <TouchableOpacity onPress={() => navigation.goBack()}>
+            <Icon name="arrow-back" size={24} color="#333" />
           </TouchableOpacity>
         </View>
         <View style={styles.loadingContainer}>
@@ -74,11 +80,11 @@ export default function ProductDetailsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <ArrowLeft size={24} color="#333" />
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Icon name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
         <TouchableOpacity>
-          <Share size={24} color="#333" />
+          <Icon name="share-outline" size={24} color="#333" />
         </TouchableOpacity>
       </View>
 

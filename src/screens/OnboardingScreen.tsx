@@ -1,11 +1,15 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import LinearGradient from 'react-native-linear-gradient';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type OnboardingScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Onboarding'>;
 
 export default function OnboardingScreen() {
-  const router = useRouter();
+  const navigation = useNavigation<OnboardingScreenNavigationProp>();
 
   return (
     <LinearGradient colors={['#F4D4C7', '#E8B4B8']} style={styles.container}>
@@ -26,7 +30,7 @@ export default function OnboardingScreen() {
 
           <TouchableOpacity 
             style={styles.getStartedButton}
-            onPress={() => router.push('/login')}
+            onPress={() => navigation.navigate('Login')}
           >
             <Text style={styles.buttonText}>Get Started</Text>
           </TouchableOpacity>

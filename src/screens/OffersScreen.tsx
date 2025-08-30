@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Tag, Clock, Gift } from 'lucide-react-native';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 export default function OffersScreen() {
   const offers = [
@@ -51,11 +51,11 @@ export default function OffersScreen() {
                 <Text style={styles.offerDescription}>{offer.description}</Text>
                 <View style={styles.offerFooter}>
                   <View style={styles.validityContainer}>
-                    <Clock size={14} color="#666" />
+                    <Icon name="time-outline" size={14} color="#666" />
                     <Text style={styles.validityText}>{offer.validUntil}</Text>
                   </View>
                   <TouchableOpacity style={styles.claimButton}>
-                    <Gift size={16} color="#FFF" />
+                    <Icon name="gift-outline" size={16} color="#FFF" />
                     <Text style={styles.claimButtonText}>Claim</Text>
                   </TouchableOpacity>
                 </View>
@@ -65,7 +65,7 @@ export default function OffersScreen() {
         </View>
 
         <View style={styles.emptyOffers}>
-          <Tag size={48} color="#C4767C" />
+          <Icon name="pricetag-outline" size={48} color="#C4767C" />
           <Text style={styles.emptyOffersTitle}>More offers coming soon!</Text>
           <Text style={styles.emptyOffersText}>
             We're working on bringing you more exciting deals and discounts.

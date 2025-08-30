@@ -11,12 +11,16 @@ import {
   Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { Search, Filter, Bell, ShoppingBag, Heart } from 'lucide-react-native';
-import { useProductStore, Product } from '@/stores/useProductStore';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useProductStore, Product } from '../stores/useProductStore';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type HomeScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 export default function HomeScreen() {
-  const router = useRouter();
+  const navigation = useNavigation<HomeScreenNavigationProp>();
   const { products, loading, fetchProducts, toggleWishlist, wishlist } = useProductStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [refreshing, setRefreshing] = useState(false);
@@ -40,17 +44,17 @@ export default function HomeScreen() {
   const renderProductCard = ({ item }: { item: Product }) => (
     <TouchableOpacity
       style={styles.productCard}
-      onPress={() => router.push(`/product-details?id=${item.id}`)}
+      onPress={() => navigation.navigate('ProductDetails', { id: item.id.toString() })}
     >
       <Image source={{ uri: item.image }} style={styles.productImage} />
       <TouchableOpacity
         style={styles.wishlistButton}
         onPress={() => toggleWishlist(item.id)}
       >
-        <Heart
+        <Icon
+          name={wishlist.includes(item.id) ? 'heart' : 'heart-outline'}
           size={16}
           color={wishlist.includes(item.id) ? '#C4767C' : '#8E8E8F'}
-          fill={wishlist.includes(item.id) ? '#C4767C' : 'none'}
         />
       </TouchableOpacity>
       <View style={styles.productInfo}>
@@ -68,17 +72,17 @@ export default function HomeScreen() {
         <Text style={styles.logo}>Viorra</Text>
         <View style={styles.headerIcons}>
           <TouchableOpacity style={styles.iconButton}>
-            <Bell size={24} color="#C4767C" />
+            <Icon name="notifications-outline" size={24} color="#C4767C" />
           </TouchableOpacity>
           <TouchableOpacity style={styles.iconButton}>
-            <ShoppingBag size={24} color="#C4767C" />
+            <Icon name="bag-outline" size={24} color="#C4767C" />
           </TouchableOpacity>
         </View>
       </View>
 
       <View style={styles.searchContainer}>
         <View style={styles.searchInputContainer}>
-          <Search size={20} color="#8E8E8F" style={styles.searchIcon} />
+          <Icon name="search" size={20} color="#8E8E8F" style={styles.searchIcon} />
           <TextInput
             style={styles.searchInput}
             placeholder="Search for all products"
@@ -87,7 +91,7 @@ export default function HomeScreen() {
           />
         </View>
         <TouchableOpacity style={styles.filterButton}>
-          <Filter size={20} color="#C4767C" />
+          <Icon name="options-outline" size={20} color="#C4767C" />
         </TouchableOpacity>
       </View>
 

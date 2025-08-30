@@ -9,12 +9,16 @@ import {
   Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { Heart, ShoppingBag, Trash2 } from 'lucide-react-native';
-import { useProductStore, Product } from '@/stores/useProductStore';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { useProductStore, Product } from '../stores/useProductStore';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type WishlistScreenNavigationProp = StackNavigationProp<RootStackParamList>;
 
 export default function WishlistScreen() {
-  const router = useRouter();
+  const navigation = useNavigation<WishlistScreenNavigationProp>();
   const { products, wishlist, toggleWishlist } = useProductStore();
   const [wishlistProducts, setWishlistProducts] = useState<Product[]>([]);
 
@@ -44,7 +48,7 @@ export default function WishlistScreen() {
     <View style={styles.wishlistItem}>
       <TouchableOpacity
         style={styles.productInfo}
-        onPress={() => router.push(`/product-details?id=${item.id}`)}
+        onPress={() => navigation.navigate('ProductDetails', { id: item.id.toString() })}
       >
         <Image source={{ uri: item.image }} style={styles.productImage} />
         <View style={styles.productDetails}>
@@ -62,13 +66,13 @@ export default function WishlistScreen() {
           style={styles.removeButton}
           onPress={() => handleRemoveFromWishlist(item.id, item.title)}
         >
-          <Trash2 size={18} color="#E74C3C" />
+          <Icon name="trash-outline" size={18} color="#E74C3C" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.addToBagButton}
           onPress={() => handleAddToBag(item)}
         >
-          <ShoppingBag size={18} color="#FFF" />
+          <Icon name="bag-outline" size={18} color="#FFF" />
           <Text style={styles.addToBagText}>Add</Text>
         </TouchableOpacity>
       </View>
@@ -77,14 +81,14 @@ export default function WishlistScreen() {
 
   const renderEmptyWishlist = () => (
     <View style={styles.emptyContainer}>
-      <Heart size={64} color="#E0E0E0" />
+      <Icon name="heart-outline" size={64} color="#E0E0E0" />
       <Text style={styles.emptyTitle}>Your Wishlist is Empty</Text>
       <Text style={styles.emptySubtitle}>
         Start adding products you love to see them here!
       </Text>
       <TouchableOpacity
         style={styles.shopNowButton}
-        onPress={() => router.push('/(tabs)')}
+        onPress={() => navigation.navigate('Main')}
       >
         <Text style={styles.shopNowText}>Shop Now</Text>
       </TouchableOpacity>

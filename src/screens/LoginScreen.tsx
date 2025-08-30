@@ -11,12 +11,16 @@ import {
   ScrollView
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Mail, Eye, EyeOff } from 'lucide-react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { RootStackParamList } from '../navigation/AppNavigator';
+
+type LoginScreenNavigationProp = StackNavigationProp<RootStackParamList, 'Login'>;
 
 export default function LoginScreen() {
-  const router = useRouter();
+  const navigation = useNavigation<LoginScreenNavigationProp>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +36,10 @@ export default function LoginScreen() {
     // Simulate API call
     setTimeout(() => {
       setLoading(false);
-      router.replace('/(tabs)');
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Main' }],
+      });
     }, 1500);
   };
 
@@ -61,7 +68,7 @@ export default function LoginScreen() {
                   keyboardType="email-address"
                   autoCapitalize="none"
                 />
-                <Mail size={20} color="#C4767C" style={styles.inputIcon} />
+                <Icon name="mail" size={20} color="#C4767C" style={styles.inputIcon} />
               </View>
 
               <View style={styles.inputContainer}>
@@ -76,11 +83,11 @@ export default function LoginScreen() {
                   onPress={() => setShowPassword(!showPassword)}
                   style={styles.inputIcon}
                 >
-                  {showPassword ? (
-                    <EyeOff size={20} color="#C4767C" />
-                  ) : (
-                    <Eye size={20} color="#C4767C" />
-                  )}
+                  <Icon 
+                    name={showPassword ? 'eye-off' : 'eye'} 
+                    size={20} 
+                    color="#C4767C" 
+                  />
                 </TouchableOpacity>
               </View>
 
@@ -105,7 +112,7 @@ export default function LoginScreen() {
                   <Text style={styles.socialButtonText}>G</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.socialButton}>
-                  <Text style={styles.socialButtonText}></Text>
+                  <Text style={styles.socialButtonText}>A</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.socialButton}>
                   <Text style={styles.socialButtonText}>f</Text>
@@ -114,7 +121,7 @@ export default function LoginScreen() {
 
               <View style={styles.registerContainer}>
                 <Text style={styles.registerText}>Not a Member? </Text>
-                <TouchableOpacity onPress={() => router.push('/register')}>
+                <TouchableOpacity onPress={() => navigation.navigate('Register')}>
                   <Text style={styles.registerLink}>Register Now</Text>
                 </TouchableOpacity>
               </View>
